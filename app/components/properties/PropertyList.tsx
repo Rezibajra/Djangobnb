@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import PropertyListItem from "./PropertyListItem";
+import apiService from '@/app/services/apiService';
 
 export type PropertyType = {
     id: string;
@@ -14,18 +15,10 @@ export type PropertyType = {
 const PropertyList = () => {
     const [properties, setProperties] = useState<PropertyType[]>([]);
     const getProperties = async () => {
-        const url = 'http://localhost:8000/api/properties';
+        const url = '/api/properties';
+        const tmpProperties = await apiService.get(url)
 
-        await fetch(url, {
-            method: 'GET',
-        })
-        .then(response => response.json())
-        .then((json) => {
-            setProperties(json.data)
-        })
-        .catch((error) => {
-            console.log('error', error);
-        })
+        setProperties(tmpProperties.data);
     };
 
     useEffect(() => {
